@@ -3,6 +3,8 @@ package com.example.myapplication.screens.home.details
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -13,8 +15,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
+import com.example.myapplication.model.getMovies
 import com.example.myapplication.navigation.MovieScreens
 import com.example.myapplication.screens.home.MainContent
+import com.example.myapplication.widgets.MovieRow
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -41,15 +46,34 @@ fun DetailsScreen(navController: NavController, movieData: String?) {
         }
     }) {
         Column(
-            modifier = Modifier.fillMaxWidth().fillMaxHeight(),
-            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(),
+            verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            movieData?.let { Text(text = it) }
+            movieData?.let {
+                val filter = getMovies().filter { movie -> movie.id == it }
+                MovieRow(movie = filter[0], OnItemClicked = {})
+                Spacer(modifier = Modifier.height(8.dp))
+                Divider()
+                LazyRow() {
+                    items(filter[0].images) { image ->
+                        Card(modifier = Modifier
+                            .padding(12.dp)
+                            .size(240.dp), elevation = 5.dp) {
+                            AsyncImage(
+                                model = image,
+                                contentDescription = null
+                            )
+                        }
+                    }
+                }
+
+
+            }
         }
     }
-
-
 
 
 }

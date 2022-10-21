@@ -1,5 +1,6 @@
 package com.example.myapplication.screens.home
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,6 +18,7 @@ import com.example.myapplication.model.getMovies
 import com.example.myapplication.navigation.MovieScreens
 import com.example.myapplication.widgets.MovieRow
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun HomeScreen(navController: NavController){
     Scaffold(topBar = {

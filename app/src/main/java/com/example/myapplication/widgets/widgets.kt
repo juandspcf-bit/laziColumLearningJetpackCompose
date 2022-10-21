@@ -9,25 +9,31 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.myapplication.model.Movie
 
 @Composable
 fun MovieRow(movie: Movie, OnItemClicked: (String) -> Unit) {
-    var expanded by remember{
+    var expanded by remember {
         mutableStateOf(false)
     }
     Card(
         modifier = Modifier
             .padding(10.dp)
             .fillMaxWidth()
-            .height(130.dp)
+
             .clickable {
                 OnItemClicked(movie.id)
             },
@@ -59,15 +65,37 @@ fun MovieRow(movie: Movie, OnItemClicked: (String) -> Unit) {
 
                 AnimatedVisibility(visible = expanded) {
                     Column {
-                        Text(text = "Heyyy")
+                        Text(buildAnnotatedString {
+                            withStyle(style = SpanStyle(color= Color.DarkGray,
+                                fontSize= 13.sp)
+                            ){
+                                append("Plot: ")
+                            }
+                            withStyle(style = SpanStyle(color= Color.DarkGray,
+                                fontSize= 13.sp,
+                                fontWeight = FontWeight.Light
+                            )
+                            ){
+                                append(movie.plot)
+                            }
+                        }, modifier = Modifier.padding(4.dp))
+                        Divider(modifier= Modifier.padding(6.dp))
+                        Text(text="Director: ${movie.director}", style=MaterialTheme.typography.caption)
+                        Text(text="Actors: ${movie.actors}", style=MaterialTheme.typography.caption)
+                        Text(text="Rating: ${movie.rating}", style=MaterialTheme.typography.caption)
+
                     }
 
                 }
                 Icon(
-                    imageVector = Icons.Filled.KeyboardArrowDown,
+                    imageVector = if (!expanded) {
+                        Icons.Filled.KeyboardArrowDown
+                    } else {
+                        Icons.Filled.KeyboardArrowUp
+                    },
                     contentDescription = "Down Arrow",
                     modifier = Modifier.clickable {
-                                                  expanded = !expanded
+                        expanded = !expanded
                     },
                     tint = Color.DarkGray
                 )
